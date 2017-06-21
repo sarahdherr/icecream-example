@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const morgan = require('morgan')
 const path = require('path')
 const eaterRoutes = require('./routes/eater')
-// const icecreamRoutes = require('./routes/icecream')
+const icecreamRoutes = require('./routes/icecream')
 const db = require('./models').db
 
 const app = express()
@@ -18,14 +18,14 @@ app.use(bodyParser.json())
 app.use(morgan('dev'))
 
 app.use('/eater', eaterRoutes)
-// app.use('/icecream', icecreamRoutes)
+app.use('/icecream', icecreamRoutes)
 
 app.use(function (err, req, res, next) {
   console.error(err.stack)
   res.status(err.status || 500).send(err.message)
 })
 
-db.sync({force: true})
+db.sync()
   .then(function () {
     console.log('Synced db')
     app.listen(3000, function () {

@@ -7,9 +7,9 @@ const db = new Sequelize('postgres://localhost:5432/tipsyscoopclub', {
 const Eater = db.define('eater', {
   name: {
     type: Sequelize.STRING,
-    validate: {
+    // validate: {
       allowNull: false
-    }
+    // }
   },
   date: {
     type: Sequelize.DATE,
@@ -84,5 +84,6 @@ const IceCream = db.define('ice cream', {
 })
 
 Eater.belongsTo(IceCream, {as: 'favorite'})
+// IceCream.hasMany(Eater)
 
 module.exports = { db, Eater, IceCream }

@@ -1,8 +1,9 @@
 'use strict'
 
 const router = require('express').Router()
-const {IceCream} = require('../models')
-
+const {Eater, IceCream} = require('../models') //.IceCream
+// console.log('what is icecream', IceCream)
+// console.log('what is eater', Eater)
 router.get('/', function (req, res, next) {
   IceCream.findAll()
     .then(function (icecreams) {
@@ -12,6 +13,9 @@ router.get('/', function (req, res, next) {
 })
 
   .get('/:calorieMax', function (req, res, next) {
+    // console.log('what is lightFlavors')
+    IceCream.findById(1)
+    .then((ice) => console.log('what is icecream', ice))
     IceCream.lightFlavors(req.params.calorieMax)
       .then(function (icecreams) {
         if (icecreams.length === 0) res.sendStatus(404)
@@ -21,9 +25,10 @@ router.get('/', function (req, res, next) {
   })
 
   .put('/:icecreamId', function (req, res, next) {
+    console.log('this is icecream model', IceCream)
     IceCream.update(
       req.body,
-      {returning: true, where: req.params.icecreamId}
+      {returning: true, where: {id: req.params.icecreamId} }
     )
       .then(function ([rowsUpdated, [updatedFlavor]]) {
         res.json(updatedFlavor)

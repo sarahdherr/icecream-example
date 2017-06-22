@@ -1,21 +1,19 @@
 const Sequelize = require('sequelize')
-
-const db = new Sequelize('postgres://localhost:5432/tipsyscoopclub', {
-  logging: false // add this after they see how annoying logging is
-})
+const db = new Sequelize('postgres://localhost:5432/tipsyscoopclub' //, {
+ // logging: false // add this after they see how annoying logging is
+//}
+)
 
 const Eater = db.define('eater', {
   name: {
     type: Sequelize.STRING,
-    // validate: {
       allowNull: false
-    // }
   },
   date: {
     type: Sequelize.DATE,
     defaultValue: Sequelize.NOW
   },
-  scoop_total: {
+  scoopTotal: {
     type: Sequelize.INTEGER
   },
   email: {

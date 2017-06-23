@@ -26,13 +26,6 @@ const Eater = db.define('eater', {
         let oneDay = 24 * 60 * 60 * 1000
         return Math.round(miliseconds / oneDay)
       }
-    },
-
-    // did not go over this one in the review -- this instance method returns the average scoops per day for an eater
-    instanceMethods: {
-      avgScoops: function () {
-        return this.scoopTotal / this.membershipDays
-      }
     }
   })
 
@@ -61,30 +54,10 @@ const IceCream = db.define('ice cream', {
           icecream.calories += 300
         }
       }
-    },
-
-    // did not go over this in the review -- this class method returns an array of all flavors that have below a passed in amount of calories
-    classMethods: {
-      lightFlavors: function (calorieMax) {
-        return this.findAll()
-          .then(function (icecreams) {
-            return icecreams.filter(function (icecream) {
-              if (icecream.calories <= calorieMax) {
-                return true
-              }
-              return false
-            })
-          })
-          .catch(function (err) {
-            console.error(err)
-          })
-      }
     }
   })
 
 
-module.exports = { db, Eater, IceCream } // destructured 
+module.exports = { db, Eater, IceCream } // destructured
 
 Eater.belongsTo(IceCream, { as: 'favorite' })
-
-

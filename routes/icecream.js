@@ -13,9 +13,11 @@ router.get('/', function (req, res, next) {
 })
 
   .get('/:calorieMax', function (req, res, next) {
-    // console.log('what is lightFlavors')
-    IceCream.findById(1)
-    .then((ice) => console.log('what is icecream', ice))
+    // IceCream.findById(2)
+    // .then((ice) => {
+    //   console.log('what is icecream', ice)
+    //   res.send('What is icecream?', ice)
+    // })
     IceCream.lightFlavors(req.params.calorieMax)
       .then(function (icecreams) {
         if (icecreams.length === 0) res.sendStatus(404)

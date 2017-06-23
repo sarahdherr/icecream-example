@@ -7,7 +7,6 @@ module.exports = router
 
 // creates a new eater
 router.post('/', function (req, res, next) {
-  console.log('This is the req.body: ', req.body)
   Eater.create(req.body)
     .then(function (eater) {
       res.status(201).json(eater)

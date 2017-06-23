@@ -1,13 +1,10 @@
 const Sequelize = require('sequelize')
-const db = new Sequelize('postgres://localhost:5432/tipsyscoopclub' //, {
- // logging: false // add this after they see how annoying logging is
-//}
-)
+const db = new Sequelize('postgres://localhost:5432/tipsyscoopclub', { logging: false })
 
 const Eater = db.define('eater', {
   name: {
     type: Sequelize.STRING,
-      allowNull: false
+    allowNull: false
   },
   date: {
     type: Sequelize.DATE,
@@ -23,19 +20,21 @@ const Eater = db.define('eater', {
     }
   }
 }, {
-  instanceMethods: {
-    avg_scoops: function () {
-      return this.scoop_total / this.membershipDays
+    getterMethods: {
+      membershipDays: function () {
+        let miliseconds = Date.now() - this.date
+        let oneDay = 24 * 60 * 60 * 1000
+        return Math.round(miliseconds / oneDay)
+      }
+    },
+
+    // did not go over this one in the review -- this instance method returns the average scoops per day for an eater
+    instanceMethods: {
+      avgScoops: function () {
+        return this.scoopTotal / this.membershipDays
+      }
     }
-  },
-  getterMethods: {
-    membershipDays: function () {
-      let miliseconds = Date.now() - this.date
-      let oneDay = 24 * 60 * 60 * 1000
-      return Math.round(miliseconds / oneDay)
-    }
-  }
-})
+  })
 
 const IceCream = db.define('ice cream', {
   flavor: {
@@ -56,32 +55,36 @@ const IceCream = db.define('ice cream', {
     type: Sequelize.ENUM('traditional', 'gelato', 'sorbet')
   }
 }, {
-  hooks: {
-    beforeCreate: function (icecream) {
-      if (icecream.alcoholic) {
-        icecream.calories += 300
+    hooks: {
+      beforeCreate: function (icecream) {
+        if (icecream.alcoholic) {
+          icecream.calories += 300
+        }
+      }
+    },
+
+    // did not go over this in the review -- this class method returns an array of all flavors that have below a passed in amount of calories
+    classMethods: {
+      lightFlavors: function (calorieMax) {
+        return this.findAll()
+          .then(function (icecreams) {
+            return icecreams.filter(function (icecream) {
+              if (icecream.calories <= calorieMax) {
+                return true
+              }
+              return false
+            })
+          })
+          .catch(function (err) {
+            console.error(err)
+          })
       }
     }
-  },
-  classMethods: {
-    lightFlavors: function (calorieMax) {
-      return this.findAll()
-        .then(function (icecreams) {
-          return icecreams.filter(function (icecream) {
-            if (icecream.calories <= calorieMax) {
-              return true
-            }
-            return false
-          })
-        })
-        .catch(function (err) {
-          console.error(err)
-        })
-    }
-  }
-})
+  })
 
-Eater.belongsTo(IceCream, {as: 'favorite'})
-// IceCream.hasMany(Eater)
 
-module.exports = { db, Eater, IceCream }
+module.exports = { db, Eater, IceCream } // destructured 
+
+Eater.belongsTo(IceCream, { as: 'favorite' })
+
+

@@ -1,7 +1,7 @@
 'use strict'
 
 const router = require('express').Router()
-const { Eater, IceCream } = require('../models')
+const Eater = require('../models').Eater
 
 module.exports = router
 

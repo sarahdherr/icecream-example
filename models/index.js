@@ -26,6 +26,12 @@ const Eater = db.define('eater', {
         let oneDay = 24 * 60 * 60 * 1000
         return Math.round(miliseconds / oneDay)
       }
+    },
+    // CHALLENGE SOLUTION: instance method returns the average scoops per day for an eater
+    instanceMethods: {
+      avgScoops: function () {
+        return this.scoopTotal / this.membershipDays
+      }
     }
   })
 

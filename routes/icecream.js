@@ -12,4 +12,16 @@ router.get('/', function (req, res, next) {
     .catch(next)
 })
 
+// CHALLENGE SOLUTION: updates a given ice cream with information on the req.body
+  .put('/:icecreamId', function (req, res, next) {
+    IceCream.update(
+      req.body,
+      {returning: true, where: {id: req.params.icecreamId}}
+    )
+      .then(function ([rowsUpdated, [updatedFlavor]]) {
+        res.json(updatedFlavor)
+      })
+      .catch(next)
+  })
+
 module.exports = router

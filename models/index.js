@@ -54,6 +54,23 @@ const IceCream = db.define('ice cream', {
           icecream.calories += 300
         }
       }
+    },
+    // CHALLENGE SOLUTION: this class method returns an array of all flavors that haev below a passed in amount
+    classMethods: {
+      lightFlavors: function (calorieMax) {
+        return this.findAll()
+          .then(function (icecreams) {
+            return icecreams.filter(function (icecream) {
+              if (icecream.calories <= calorieMax) {
+                return true
+              }
+              return false
+            })
+          })
+          .catch(function (err) {
+            console.error(err)
+          })
+      }
     }
   })
 

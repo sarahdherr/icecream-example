@@ -26,6 +26,13 @@ const Eater = db.define('eater', {
         let oneDay = 24 * 60 * 60 * 1000
         return Math.round(miliseconds / oneDay)
       }
+    },
+    // CHALLENGE SOLUTION: instance method to increment total scoop
+    instanceMethods: {
+      addScoop: function () {
+        this.scoopTotal++
+        return this.scoopTotal
+      }
     }
   })
 
